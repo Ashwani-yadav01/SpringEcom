@@ -1,12 +1,14 @@
 package com.Ashwani.Portfolio.service;
 
-import com.Ashwani.Portfolio.model.Category;
-
-import java.util.List;
+import com.Ashwani.Portfolio.payload.CategoryDTO;
+import com.Ashwani.Portfolio.payload.CategoryResponse;
 
 public interface CategoryService {
-    List<Category> getAllCategories();
-    void createCategory(Category category);
-    String deleteCategory(Long id);
-     Category updateCategory(Category category,Long categoryId);
+    CategoryResponse getAllCategories();
+
+    CategoryDTO createCategory(CategoryDTO categoryDTO);
+
+    CategoryDTO deleteCategory(Long id);
+
+    CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId);
 }
