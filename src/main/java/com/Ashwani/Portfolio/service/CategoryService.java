@@ -4,7 +4,7 @@ import com.Ashwani.Portfolio.payload.CategoryDTO;
 import com.Ashwani.Portfolio.payload.CategoryResponse;
 
 public interface CategoryService {
-    CategoryResponse getAllCategories();
+    CategoryResponse getAllCategories(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     CategoryDTO createCategory(CategoryDTO categoryDTO);
 
