@@ -1,4 +1,5 @@
 package com.Ashwani.Portfolio.service;
+
 import com.Ashwani.Portfolio.exceptions.APIException;
 import com.Ashwani.Portfolio.exceptions.ResourceNotFoundException;
 import com.Ashwani.Portfolio.model.Cart;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 @Service
 public class CartServiceImpl implements CartService {
 
@@ -112,10 +114,11 @@ public class CartServiceImpl implements CartService {
 
         List<CartDTO> cartDTOs = carts.stream().map(cart -> {
             CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
-
-            List<ProductDTO> products = cart.getCartItems().stream()
-                    .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class)).collect(Collectors.toList());
-
+            List<ProductDTO> products = cart.getCartItems().stream().map(cartItem -> {
+                ProductDTO productDTO = modelMapper.map(cartItem.getProduct(), ProductDTO.class);
+                productDTO.setQuantity(cartItem.getQuantity()); // Set the quantity from CartItem
+                return productDTO;
+            }).collect(Collectors.toList());
             cartDTO.setProducts(products);
 
             return cartDTO;
@@ -129,7 +132,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDTO getCart(String emailId, Long cartId) {
         Cart cart = cartRepository.findCartByEmailAndCartId(emailId, cartId);
-        if (cart == null){
+        if (cart == null) {
             throw new ResourceNotFoundException("Cart", "cartId", cartId);
         }
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
@@ -149,7 +152,7 @@ public class CartServiceImpl implements CartService {
 
         String emailId = authUtil.loggedInEmail();
         Cart userCart = cartRepository.findCartByEmail(emailId);
-        Long cartId  = userCart.getCartId();
+        Long cartId = userCart.getCartId();
 
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart", "cartId", cartId));
@@ -180,7 +183,7 @@ public class CartServiceImpl implements CartService {
             throw new APIException("The resulting quantity cannot be negative.");
         }
 
-        if (newQuantity == 0){
+        if (newQuantity == 0) {
             deleteProductFromCart(cartId, productId);
         } else {
             cartItem.setProductPrice(product.getSpecialPrice());
@@ -191,7 +194,7 @@ public class CartServiceImpl implements CartService {
         }
 
         CartItem updatedItem = cartItemRepository.save(cartItem);
-        if(updatedItem.getQuantity() == 0){
+        if (updatedItem.getQuantity() == 0) {
             cartItemRepository.deleteById(updatedItem.getCartItemId());
         }
 
