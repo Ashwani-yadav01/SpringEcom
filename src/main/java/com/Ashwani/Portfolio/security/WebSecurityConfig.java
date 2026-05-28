@@ -76,9 +76,10 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/h2-console/**").permitAll()
-                                //.requestMatchers("/api/admin/**").permitAll()
-                                //.requestMatchers("/api/public/**").permitAll()
+//                                .requestMatchers("/api/admin/**").permitAll()
+//                                .requestMatchers("/api/public/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/swagger-ui.html").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/images/**").permitAll()
                                 .anyRequest().authenticated()
@@ -93,15 +94,15 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().requestMatchers("/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**"));
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web -> web.ignoring().requestMatchers("/v3/api-docs",
+//                "/configuration/ui",
+//                "/swagger-resources/**",
+//                "/configuration/security",
+//                "/swagger-ui.html",
+//                "/webjars/**"));
+//    }
 
 
     @Bean
